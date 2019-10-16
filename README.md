@@ -1,9 +1,6 @@
 # WRDP
-## <p align="center">![Screenshot](https://i.imgur.com/s0eutgZ.gif)
 
-| Current Version    |  Released      | 
-| :----------------- | :------------- |
-| `1.0`              | 2019-10-16     |  
+Brute force tool for Microsoft Remote Desktop on port 3389
 
 ### Getting Started:
 
